@@ -6,72 +6,97 @@
     <meta
       name="viewport"
       content="width=device-width,
-               initial-scale=1.0,
-               maximum-scale=1.0,
-               user-scalable=no"
+           initial-scale=1.0,
+           maximum-scale=1.0,
+           user-scalable=no"
     />
 
     <title>AR Earth & Moon</title>
 
+    <!-- A-Frame -->
     <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
 
+    <!-- AR.js -->
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 
     <style>
       html,
       body {
         margin: 0;
+
         width: 100%;
         height: 100%;
+
         overflow: hidden;
+
         background: black;
+
         font-family: Arial, sans-serif;
       }
 
+      /* START */
+
       #start {
         position: fixed;
-        z-index: 9999;
+
         inset: 0;
 
+        z-index: 9999;
+
         display: flex;
+
         align-items: center;
+
         justify-content: center;
 
         background: #050816;
+
         color: white;
+
+        text-align: center;
       }
 
-      .start-box {
+      .startBox {
         width: 85%;
+
         max-width: 420px;
-        text-align: center;
+
         padding: 30px;
 
-        border-radius: 20px;
+        border-radius: 22px;
 
         background: rgba(255, 255, 255, 0.08);
       }
 
-      .start-box h1 {
-        font-size: 28px;
+      .startBox h1 {
+        font-size: 30px;
+
+        margin-bottom: 10px;
       }
 
-      .start-box p {
-        color: #bbb;
-        line-height: 1.5;
+      .startBox p {
+        color: #b8bfd2;
+
+        line-height: 1.6;
+
+        font-size: 14px;
       }
 
       button {
-        border: none;
+        border: 0;
+
         border-radius: 12px;
 
         padding: 15px 30px;
 
-        font-size: 17px;
-        font-weight: bold;
+        margin-top: 15px;
 
-        cursor: pointer;
+        font-size: 17px;
+
+        font-weight: bold;
       }
+
+      /* STATUS */
 
       #status {
         position: fixed;
@@ -84,61 +109,41 @@
 
         transform: translateX(-50%);
 
-        padding: 12px 18px;
-
-        background: rgba(0, 0, 0, 0.8);
-
-        color: white;
+        padding: 12px 20px;
 
         border-radius: 30px;
-
-        font-size: 14px;
-
-        white-space: nowrap;
-      }
-
-      #debug {
-        position: fixed;
-
-        z-index: 1001;
-
-        top: 15px;
-
-        left: 15px;
-
-        right: 15px;
-
-        padding: 12px;
 
         background: rgba(0, 0, 0, 0.75);
 
         color: white;
 
-        border-radius: 12px;
+        font-size: 13px;
 
-        font-size: 12px;
-
-        display: none;
+        white-space: nowrap;
       }
     </style>
   </head>
 
   <body>
-    <!-- START SCREEN -->
+    <!-- ===================================
+     START SCREEN
+=================================== -->
 
     <div id="start">
-      <div class="start-box">
-        <h1>🌎 AR Planets</h1>
+      <div class="startBox">
+        <h1>🌎 AR Solar System</h1>
 
-        <p>Scan Barcode 5 to see Earth. Scan Barcode 7 to see the Moon.</p>
+        <p>Point your camera at Barcode 5 for Earth or Barcode 7 for Moon.</p>
 
-        <button id="startButton">Start Camera</button>
+        <button id="startButton">Start AR Camera</button>
       </div>
     </div>
 
-    <div id="debug"></div>
+    <div id="status">Waiting for camera...</div>
 
-    <div id="status">Waiting...</div>
+    <!-- ===================================
+     AR SCENE
+=================================== -->
 
     <a-scene
       embedded
@@ -147,6 +152,7 @@
         antialias: true;
         alpha: true;
         colorManagement: true;
+        physicallyCorrectLights: true;
     "
       arjs="
         sourceType: webcam;
@@ -155,49 +161,66 @@
         matrixCodeType: 3x3;
         debugUIEnabled: false;
     "
-      loading-screen="enabled: false"
     >
-      <!-- =========================
-         MODELS
-    ========================== -->
+      <!-- ===================================
+     ASSETS
+=================================== -->
 
-      <a-assets timeout="30000">
-        <a-asset-item id="earthGLB" src="./earth.glb"> </a-asset-item>
+      <a-assets>
+        <a-asset-item id="earthAsset" src="./earth.glb"> </a-asset-item>
 
-        <a-asset-item id="moonGLB" src="./moon.glb"> </a-asset-item>
+        <a-asset-item id="moonAsset" src="./moon.glb"> </a-asset-item>
       </a-assets>
 
-      <!-- =========================
-         LIGHTING
-    ========================== -->
+      <!-- ===================================
+     LIGHTING
+=================================== -->
+
+      <!-- Strong ambient light -->
 
       <a-entity
         light="
-            type: ambient;
-            intensity: 2;
-            color: #ffffff;
-        "
+        type: ambient;
+        color: #ffffff;
+        intensity: 3;
+    "
       >
       </a-entity>
+
+      <!-- Main light -->
 
       <a-entity
         light="
-            type: directional;
-            intensity: 3;
-            color: #ffffff;
-        "
-        position="2 4 3"
+        type: directional;
+        color: #ffffff;
+        intensity: 4;
+    "
+        position="2 4 4"
       >
       </a-entity>
 
-      <!-- =========================
-         EARTH BARCODE 5
-    ========================== -->
+      <!-- Fill light -->
+
+      <a-entity
+        light="
+        type: directional;
+        color: #ffffff;
+        intensity: 2;
+    "
+        position="-3 2 1"
+      >
+      </a-entity>
+
+      <!-- ===================================
+     EARTH MARKER
+     BARCODE 5
+=================================== -->
 
       <a-marker
         id="earthMarker"
         type="barcode"
         value="5"
+        size="1"
         smooth="true"
         smooth-count="10"
         smooth-tolerance="0.01"
@@ -205,22 +228,23 @@
       >
         <a-entity
           id="earthModel"
-          gltf-model="#earthGLB"
+          gltf-model="#earthAsset"
           position="0 0 0"
           scale="1 1 1"
-          visible="true"
         >
         </a-entity>
       </a-marker>
 
-      <!-- =========================
-         MOON BARCODE 7
-    ========================== -->
+      <!-- ===================================
+     MOON MARKER
+     BARCODE 7
+=================================== -->
 
       <a-marker
         id="moonMarker"
         type="barcode"
         value="7"
+        size="1"
         smooth="true"
         smooth-count="10"
         smooth-tolerance="0.01"
@@ -228,10 +252,9 @@
       >
         <a-entity
           id="moonModel"
-          gltf-model="#moonGLB"
+          gltf-model="#moonAsset"
           position="0 0 0"
           scale="1 1 1"
-          visible="true"
         >
         </a-entity>
       </a-marker>
@@ -242,9 +265,9 @@
     </a-scene>
 
     <script>
-      /* =========================================
+      /* ===================================
    ELEMENTS
-========================================= */
+=================================== */
 
       const start = document.getElementById("start");
 
@@ -252,34 +275,20 @@
 
       const status = document.getElementById("status");
 
-      const debug = document.getElementById("debug");
+      const earth = document.getElementById("earthModel");
+
+      const moon = document.getElementById("moonModel");
 
       const earthMarker = document.getElementById("earthMarker");
 
       const moonMarker = document.getElementById("moonMarker");
 
-      const earthModel = document.getElementById("earthModel");
+      /* ===================================
+   CAMERA START
+=================================== */
 
-      const moonModel = document.getElementById("moonModel");
-
-      /* =========================================
-   DEBUG
-========================================= */
-
-      function log(message) {
-        console.log(message);
-
-        debug.style.display = "block";
-
-        debug.innerHTML += message + "<br>";
-      }
-
-      /* =========================================
-   CAMERA
-========================================= */
-
-      startButton.addEventListener("click", async function () {
-        status.innerText = "Starting camera...";
+      startButton.addEventListener("click", async () => {
+        status.innerText = "Requesting camera...";
 
         try {
           const stream = await navigator.mediaDevices.getUserMedia({
@@ -292,115 +301,219 @@
             audio: false,
           });
 
-          stream.getTracks().forEach((track) => track.stop());
+          /*
+           * We only use this request
+           * to trigger permission.
+           *
+           * AR.js will manage the camera.
+           */
+
+          stream.getTracks().forEach((track) => {
+            track.stop();
+          });
 
           start.style.display = "none";
 
-          status.innerText = "Camera ready — scan marker";
+          status.innerText = "Camera ready — scan Barcode 5 or 7";
         } catch (error) {
           console.error(error);
 
           status.innerText = "Camera permission failed";
-
-          log("Camera error: " + error.message);
         }
       });
 
-      /* =========================================
-   EARTH MODEL
-========================================= */
+      /* ===================================
+   FIX GLTF MATERIALS
+=================================== */
 
-      earthModel.addEventListener("model-loaded", function (event) {
-        log("✓ Earth GLB loaded");
+      function fixMaterials(modelEntity) {
+        if (!modelEntity.object3D) {
+          return;
+        }
 
-        status.innerText = "Earth model loaded";
+        modelEntity.object3D.traverse(function (object) {
+          if (!object.isMesh) {
+            return;
+          }
+
+          /*
+           * Enable shadows
+           */
+
+          object.castShadow = true;
+
+          object.receiveShadow = true;
+
+          /*
+           * Fix materials
+           */
+
+          if (object.material) {
+            const materials = Array.isArray(object.material)
+              ? object.material
+              : [object.material];
+
+            materials.forEach(function (material) {
+              /*
+               * Make sure the material
+               * uses its texture.
+               */
+
+              material.needsUpdate = true;
+
+              /*
+               * Do not make the model
+               * transparent accidentally.
+               */
+
+              material.transparent = false;
+
+              material.opacity = 1;
+
+              /*
+               * Fix color if material
+               * has an invalid color.
+               */
+
+              if (
+                material.color &&
+                material.color.r === 0 &&
+                material.color.g === 0 &&
+                material.color.b === 0
+              ) {
+                material.color.setRGB(1, 1, 1);
+              }
+            });
+          }
+        });
+      }
+
+      /* ===================================
+   AUTO SCALE MODEL
+=================================== */
+
+      function fitModel(modelEntity) {
+        if (!modelEntity.object3D) {
+          return;
+        }
+
+        const THREE = AFRAME.THREE;
+
+        const box = new THREE.Box3().setFromObject(modelEntity.object3D);
+
+        const size = new THREE.Vector3();
+
+        const center = new THREE.Vector3();
+
+        box.getSize(size);
+
+        box.getCenter(center);
+
+        /*
+         * Current model dimensions
+         */
+
+        console.log("Model size:", size);
+
+        /*
+         * Center the actual GLB
+         */
+
+        modelEntity.object3D.position.x -= center.x;
+
+        modelEntity.object3D.position.y -= center.y;
+
+        modelEntity.object3D.position.z -= center.z;
+
+        /*
+         * Automatically scale model
+         *
+         * Target size = approximately
+         * 1 AR marker unit.
+         */
+
+        const maxDimension = Math.max(size.x, size.y, size.z);
+
+        if (maxDimension > 0) {
+          const targetSize = 0.8;
+
+          const scale = targetSize / maxDimension;
+
+          modelEntity.object3D.scale.set(scale, scale, scale);
+        }
+      }
+
+      /* ===================================
+   EARTH LOADED
+=================================== */
+
+      earth.addEventListener("model-loaded", function () {
+        console.log("EARTH GLB LOADED");
+
+        fixMaterials(earth);
+
+        fitModel(earth);
+
+        status.innerText = "🌎 Earth model ready";
       });
 
-      earthModel.addEventListener("model-error", function (event) {
-        console.error("Earth error", event);
+      /* ===================================
+   MOON LOADED
+=================================== */
 
-        log("✕ Earth GLB failed");
+      moon.addEventListener("model-loaded", function () {
+        console.log("MOON GLB LOADED");
 
-        status.innerText = "Earth GLB failed";
+        fixMaterials(moon);
+
+        fitModel(moon);
+
+        status.innerText = "🌕 Moon model ready";
       });
 
-      /* =========================================
-   MOON MODEL
-========================================= */
+      /* ===================================
+   EARTH ERROR
+=================================== */
 
-      moonModel.addEventListener("model-loaded", function (event) {
-        log("✓ Moon GLB loaded");
+      earth.addEventListener("model-error", function (event) {
+        console.error("EARTH GLB ERROR", event);
 
-        status.innerText = "Moon model loaded";
+        status.innerText = "Earth GLB rendering error";
       });
 
-      moonModel.addEventListener("model-error", function (event) {
-        console.error("Moon error", event);
+      /* ===================================
+   MOON ERROR
+=================================== */
 
-        log("✕ Moon GLB failed");
+      moon.addEventListener("model-error", function (event) {
+        console.error("MOON GLB ERROR", event);
 
-        status.innerText = "Moon GLB failed";
+        status.innerText = "Moon GLB rendering error";
       });
 
-      /* =========================================
+      /* ===================================
    EARTH MARKER
-========================================= */
+=================================== */
 
       earthMarker.addEventListener("markerFound", function () {
-        status.innerText = "🌎 EARTH MARKER FOUND";
-
-        log("Earth marker detected");
+        status.innerText = "🌎 Earth detected";
       });
 
       earthMarker.addEventListener("markerLost", function () {
         status.innerText = "Searching for marker...";
       });
 
-      /* =========================================
+      /* ===================================
    MOON MARKER
-========================================= */
+=================================== */
 
       moonMarker.addEventListener("markerFound", function () {
-        status.innerText = "🌕 MOON MARKER FOUND";
-
-        log("Moon marker detected");
+        status.innerText = "🌕 Moon detected";
       });
 
       moonMarker.addEventListener("markerLost", function () {
         status.innerText = "Searching for marker...";
       });
-
-      /* =========================================
-   CHECK GLB FILES
-========================================= */
-
-      fetch("./earth.glb", {
-        method: "HEAD",
-      })
-        .then((response) => {
-          if (response.ok) {
-            log("✓ earth.glb found");
-          } else {
-            log("✕ earth.glb HTTP " + response.status);
-          }
-        })
-        .catch((error) => {
-          log("✕ Cannot access earth.glb");
-        });
-
-      fetch("./moon.glb", {
-        method: "HEAD",
-      })
-        .then((response) => {
-          if (response.ok) {
-            log("✓ moon.glb found");
-          } else {
-            log("✕ moon.glb HTTP " + response.status);
-          }
-        })
-        .catch((error) => {
-          log("✕ Cannot access moon.glb");
-        });
     </script>
   </body>
 </html>
