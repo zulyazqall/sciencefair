@@ -2,274 +2,430 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>AR Planet Explorer</title>
+    <title>Science Fair 2026 | Sapporo International School</title>
 
-    <!-- A-Frame -->
-    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-
-    <!-- AR.js Marker Tracking -->
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-
-    <style>
-      * {
-        box-sizing: border-box;
-      }
-
-      body {
-        margin: 0;
-        overflow: hidden;
-        font-family: Arial, sans-serif;
-        background: #000;
-      }
-
-      .ui {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 10;
-        pointer-events: none;
-      }
-
-      .title {
-        margin: 20px auto 0;
-        width: fit-content;
-        padding: 12px 20px;
-        border-radius: 30px;
-
-        background: rgba(10, 20, 40, 0.85);
-        color: white;
-
-        font-size: 18px;
-        font-weight: bold;
-
-        backdrop-filter: blur(10px);
-      }
-
-      .instruction {
-        position: fixed;
-        bottom: 25px;
-        left: 50%;
-        transform: translateX(-50%);
-
-        width: calc(100% - 40px);
-        max-width: 500px;
-
-        padding: 14px 18px;
-
-        border-radius: 15px;
-
-        background: rgba(0, 0, 0, 0.75);
-        color: white;
-
-        text-align: center;
-        font-size: 14px;
-      }
-
-      .planet-info {
-        position: fixed;
-        top: 80px;
-        left: 20px;
-
-        padding: 12px 16px;
-
-        background: rgba(0, 0, 0, 0.65);
-        color: white;
-
-        border-radius: 12px;
-
-        display: none;
-      }
-    </style>
-
-    <script>
-      /*
-       * Custom planet component
-       */
-      AFRAME.registerComponent("planet", {
-        schema: {
-          color: {
-            type: "color",
-            default: "#2f6fed",
-          },
-        },
-
-        init: function () {
-          const el = this.el;
-
-          /*
-           * Main planet
-           */
-          const planet = document.createElement("a-sphere");
-
-          planet.setAttribute("radius", "1");
-
-          planet.setAttribute(
-            "material",
-            `
-          color: ${this.data.color};
-          roughness: 0.8;
-          metalness: 0;
-          `,
-          );
-
-          el.appendChild(planet);
-
-          /*
-           * Atmosphere
-           */
-          const atmosphere = document.createElement("a-sphere");
-
-          atmosphere.setAttribute("radius", "1.08");
-
-          atmosphere.setAttribute(
-            "material",
-            `
-          color: #66ccff;
-          opacity: 0.18;
-          transparent: true;
-          side: double;
-          `,
-          );
-
-          el.appendChild(atmosphere);
-
-          /*
-           * Continents
-           * Simple green shapes placed around Earth
-           */
-          const continents = [
-            { x: 0.3, y: 0.3, z: 0.9, scale: "0.35 0.2 0.05" },
-            { x: -0.5, y: 0.1, z: 0.8, scale: "0.25 0.35 0.05" },
-            { x: 0.1, y: -0.4, z: 0.85, scale: "0.2 0.3 0.05" },
-            { x: 0.6, y: -0.2, z: 0.65, scale: "0.25 0.2 0.05" },
-          ];
-
-          continents.forEach((c) => {
-            const land = document.createElement("a-sphere");
-
-            land.setAttribute("position", `${c.x} ${c.y} ${c.z}`);
-
-            land.setAttribute("scale", c.scale);
-
-            land.setAttribute(
-              "material",
-              `
-            color: #35a853;
-            roughness: 1;
-            `,
-            );
-
-            el.appendChild(land);
-          });
-
-          /*
-           * Rotation animation
-           */
-          el.setAttribute(
-            "animation",
-            `
-          property: rotation;
-          to: 0 360 0;
-          dur: 12000;
-          easing: linear;
-          loop: true;
-          `,
-          );
-        },
-      });
-
-      /*
-       * Marker detection
-       */
-      AFRAME.registerComponent("marker-events", {
-        init: function () {
-          const marker = this.el;
-
-          const info = document.querySelector(".planet-info");
-
-          marker.addEventListener("markerFound", function () {
-            console.log("Planet marker detected!");
-
-            info.style.display = "block";
-          });
-
-          marker.addEventListener("markerLost", function () {
-            console.log("Marker lost");
-
-            info.style.display = "none";
-          });
-        },
-      });
-    </script>
+    <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
-    <!-- UI -->
+    <!-- NAVIGATION -->
+    <nav>
+      <div class="nav-container">
+        <a href="#" class="logo"> SIS <span>SCIENCE FAIR 2026</span> </a>
 
-    <div class="ui">
-      <div class="title">🌍 AR Planet Explorer</div>
+        <ul class="nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">IT Projects</a></li>
+          <li><a href="#timeline">Fair Journey</a></li>
+        </ul>
+
+        <div class="mobile-menu">☰</div>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero">
+      <div class="hero-container">
+        <div class="hero-content">
+          <div class="year">SCIENCE FAIR • 2026</div>
+
+          <h1>
+            SCIENCE<br />
+            <span>FAIR</span>
+          </h1>
+
+          <h2>Sapporo International School</h2>
+
+          <p>
+            Welcome to the Science Fair 2026 digital showcase. Explore student
+            ideas, experiments and technology projects combining science,
+            creativity and innovation.
+          </p>
+
+          <div class="buttons">
+            <a href="#projects" class="btn btn-primary">
+              Explore IT Projects →
+            </a>
+
+            <a href="#about" class="btn btn-outline"> Discover the Fair </a>
+          </div>
+        </div>
+
+        <!-- HERO GRAPHIC -->
+        <div class="science-graphic">
+          <div class="atom">⚛</div>
+
+          <div class="orbit"></div>
+
+          <div class="computer">
+            <div class="screen">
+              <div class="code-line">&gt; SCIENCE_FAIR_2026</div>
+
+              <div class="code-line">&gt; AI + ROBOTICS</div>
+
+              <div class="code-line">&gt; AR / VR + WEB</div>
+
+              <div class="code-line">&gt; IoT + CODING</div>
+
+              <div class="code-line">&gt; status: READY</div>
+            </div>
+
+            <div class="computer-base"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ABOUT -->
+    <section class="about" id="about">
+      <div class="container">
+        <div class="section-label">Science Fair 2026</div>
+
+        <h2 class="section-title">Explore. Create. Innovate.</h2>
+
+        <p class="section-description">
+          Science Fair 2026 brings students together to investigate scientific
+          questions, develop creative solutions and demonstrate how technology
+          can help us understand the world.
+        </p>
+
+        <div class="about-grid">
+          <div class="info-card">
+            <div class="info-icon">🔬</div>
+
+            <h3>Scientific Discovery</h3>
+
+            <p>
+              Students investigate questions, test ideas, collect evidence and
+              communicate their discoveries.
+            </p>
+          </div>
+
+          <div class="info-card">
+            <div class="info-icon">💻</div>
+
+            <h3>IT & Technology</h3>
+
+            <p>
+              Explore programming, artificial intelligence, web development,
+              robotics, AR, VR and IoT projects.
+            </p>
+          </div>
+
+          <div class="info-card">
+            <div class="info-icon">🚀</div>
+
+            <h3>Future Innovation</h3>
+
+            <p>
+              Students turn ideas into prototypes and imagine how technology
+              could shape the future.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- IT PROJECTS -->
+    <section class="projects" id="projects">
+      <div class="container">
+        <div class="section-label">Student Technology Showcase</div>
+
+        <h2 class="section-title">IT Projects 2026</h2>
+
+        <p class="section-description">
+          Discover the technology projects created by students. Choose a
+          category to explore different areas of IT and digital innovation.
+        </p>
+
+        <!-- FILTERS -->
+        <div class="filters">
+          <button class="filter active" data-filter="all">All Projects</button>
+
+          <button class="filter" data-filter="ai">AI</button>
+
+          <button class="filter" data-filter="robotics">Robotics</button>
+
+          <button class="filter" data-filter="web">Web</button>
+
+          <button class="filter" data-filter="arvr">AR / VR</button>
+
+          <button class="filter" data-filter="iot">IoT</button>
+        </div>
+
+        <!-- PROJECT GRID -->
+        <div class="project-grid">
+          <!-- PROJECT 01 -->
+          <article
+            class="project-card"
+            data-category="ai"
+            data-title="AI Image Classifier"
+            data-description="A student project exploring how artificial intelligence can identify and classify objects in images using machine-learning techniques."
+            data-student="Student IT Project Team"
+          >
+            <div class="project-visual">
+              <div class="project-number">PROJECT 01</div>
+
+              <div class="project-symbol">🧠</div>
+            </div>
+
+            <div class="project-content">
+              <div class="project-category">Artificial Intelligence</div>
+
+              <h3>AI Image Classifier</h3>
+
+              <p>
+                Exploring how AI can recognize and classify objects from digital
+                images.
+              </p>
+
+              <div class="student">Science Fair 2026</div>
+            </div>
+          </article>
+
+          <!-- PROJECT 02 -->
+          <article
+            class="project-card"
+            data-category="robotics"
+            data-title="Autonomous Robot"
+            data-description="An autonomous robot designed to navigate an environment, detect obstacles and respond to sensor information."
+            data-student="Robotics Project Team"
+          >
+            <div class="project-visual orange">
+              <div class="project-number">PROJECT 02</div>
+
+              <div class="project-symbol">🤖</div>
+            </div>
+
+            <div class="project-content">
+              <div class="project-category">Robotics</div>
+
+              <h3>Autonomous Robot</h3>
+
+              <p>
+                A robot that uses sensors and programming to navigate its
+                environment.
+              </p>
+
+              <div class="student">Science Fair 2026</div>
+            </div>
+          </article>
+
+          <!-- PROJECT 03 -->
+          <article
+            class="project-card"
+            data-category="web"
+            data-title="Interactive Science Portal"
+            data-description="A modern educational website designed to present scientific information through interactive content, visualizations and digital experiments."
+            data-student="Web Development Team"
+          >
+            <div class="project-visual green">
+              <div class="project-number">PROJECT 03</div>
+
+              <div class="project-symbol">🌐</div>
+            </div>
+
+            <div class="project-content">
+              <div class="project-category">Web Development</div>
+
+              <h3>Science Portal</h3>
+
+              <p>
+                An interactive website for exploring scientific concepts and
+                experiments.
+              </p>
+
+              <div class="student">Science Fair 2026</div>
+            </div>
+          </article>
+
+          <!-- PROJECT 04 -->
+          <article
+            class="project-card"
+            data-category="arvr"
+            data-title="AR Planet Explorer"
+            data-description="An augmented-reality experience that allows users to explore planets through a smartphone or compatible AR device."
+            data-student="AR / VR Project Team"
+          >
+            <div class="project-visual purple">
+              <div class="project-number">PROJECT 04</div>
+
+              <div class="project-symbol">🪐</div>
+            </div>
+
+            <div class="project-content">
+              <div class="project-category">AR / VR</div>
+
+              <h3>AR Planet Explorer</h3>
+
+              <p>
+                Explore planets through an interactive augmented-reality
+                experience.
+              </p>
+
+              <div class="student">Science Fair 2026</div>
+            </div>
+          </article>
+
+          <!-- PROJECT 05 -->
+          <article
+            class="project-card"
+            data-category="iot"
+            data-title="Smart Classroom"
+            data-description="A connected classroom concept using sensors to monitor environmental conditions such as temperature, light and air quality."
+            data-student="IoT Project Team"
+          >
+            <div class="project-visual cyan">
+              <div class="project-number">PROJECT 05</div>
+
+              <div class="project-symbol">📡</div>
+            </div>
+
+            <div class="project-content">
+              <div class="project-category">Internet of Things</div>
+
+              <h3>Smart Classroom</h3>
+
+              <p>
+                Using connected sensors to monitor and understand classroom
+                environments.
+              </p>
+
+              <div class="student">Science Fair 2026</div>
+            </div>
+          </article>
+
+          <!-- PROJECT 06 -->
+          <article
+            class="project-card"
+            data-category="ai"
+            data-title="AI Science Assistant"
+            data-description="An educational AI assistant concept designed to help students explore scientific questions and discover relevant information."
+            data-student="AI Innovation Team"
+          >
+            <div class="project-visual red">
+              <div class="project-number">PROJECT 06</div>
+
+              <div class="project-symbol">💡</div>
+            </div>
+
+            <div class="project-content">
+              <div class="project-category">Artificial Intelligence</div>
+
+              <h3>AI Science Assistant</h3>
+
+              <p>
+                Exploring how AI could support students while learning science.
+              </p>
+
+              <div class="student">Science Fair 2026</div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAIR JOURNEY -->
+    <section class="timeline-section" id="timeline">
+      <div class="container">
+        <div class="section-label">Project Journey</div>
+
+        <h2 class="section-title">From question to innovation.</h2>
+
+        <p class="section-description">
+          Every project begins with curiosity. Students develop their ideas
+          through research, experimentation, technology and collaboration.
+        </p>
+
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+
+            <h3>01 — Ask</h3>
+
+            <p>Start with a question, problem or idea worth exploring.</p>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+
+            <h3>02 — Research</h3>
+
+            <p>
+              Investigate existing knowledge and develop a plan for testing the
+              idea.
+            </p>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+
+            <h3>03 — Build</h3>
+
+            <p>
+              Create experiments, software, robots, websites, prototypes or
+              digital experiences.
+            </p>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+
+            <h3>04 — Test</h3>
+
+            <p>Test the project, analyze results and improve the design.</p>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+
+            <h3>05 — Share</h3>
+
+            <p>
+              Present the final project to visitors and share what was
+              discovered.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-container">
+        <div>
+          <h3>Science Fair 2026</h3>
+
+          <p>Sapporo International School</p>
+
+          <p>Student Science & IT Exhibition</p>
+
+          <p>Explore • Create • Innovate</p>
+        </div>
+
+        <div class="footer-year">2026</div>
+      </div>
+    </footer>
+
+    <!-- PROJECT MODAL -->
+    <div class="modal" id="projectModal">
+      <div class="modal-box">
+        <button class="close" id="closeModal">×</button>
+
+        <div class="modal-category" id="modalCategory">PROJECT</div>
+
+        <h2 id="modalTitle">Project Title</h2>
+
+        <p id="modalDescription">Project description.</p>
+
+        <br />
+
+        <strong id="modalStudent"> Student Project </strong>
+      </div>
     </div>
 
-    <div class="planet-info">
-      🌍 Earth<br />
-      <small>AR Planet detected</small>
-    </div>
-
-    <div class="instruction">
-      Point your camera at the <b>Hiro marker</b> to see Earth.
-    </div>
-
-    <!-- AR SCENE -->
-
-    <a-scene
-      embedded
-      vr-mode-ui="enabled: false"
-      renderer="
-      antialias: true;
-      alpha: true;
-      logarithmicDepthBuffer: true;
-    "
-      arjs="
-      sourceType: webcam;
-      trackingMethod: best;
-      debugUIEnabled: false;
-    "
-    >
-      <!-- MARKER -->
-
-      <a-marker
-        preset="hiro"
-        marker-events
-        emitevents="true"
-        smooth="true"
-        smooth-count="5"
-      >
-        <!-- PLANET -->
-
-        <a-entity position="0 1.2 0" scale="0.7 0.7 0.7" planet> </a-entity>
-
-        <!-- Planet Label -->
-
-        <a-text
-          value="EARTH"
-          position="0 2.55 0"
-          align="center"
-          color="white"
-          width="4"
-          look-at="[camera]"
-        >
-        </a-text>
-      </a-marker>
-
-      <!-- CAMERA -->
-
-      <a-entity camera></a-entity>
-    </a-scene>
+    <script src="script.js"></script>
   </body>
 </html>

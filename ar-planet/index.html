@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta
+      name="viewport"
+      content="width=device-width,
+             initial-scale=1.0,
+             maximum-scale=1.0,
+             user-scalable=no"
+    />
+
+    <title>AR Solar System — Earth & Moon</title>
+
+    <!-- A-Frame -->
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+
+    <!-- AR.js Marker Tracking -->
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #050816;
+      }
+
+      .ui {
+        position: fixed;
+        z-index: 100;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 18px;
+        pointer-events: none;
+      }
+
+      .panel {
+        max-width: 520px;
+        margin: auto;
+        padding: 18px 20px;
+        border-radius: 18px;
+
+        background: rgba(5, 8, 22, 0.82);
+        backdrop-filter: blur(10px);
+
+        color: white;
+        text-align: center;
+
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+      }
+
+      .title {
+        margin: 0 0 6px;
+        font-size: 25px;
+        font-weight: 800;
+      }
+
+      .subtitle {
+        margin: 0;
+        color: #b8c2d9;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .instructions {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 14px;
+        flex-wrap: wrap;
+      }
+
+      .marker-card {
+        padding: 9px 13px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.09);
+        font-size: 13px;
+      }
+
+      .earth {
+        color: #64b5ff;
+      }
+
+      .moon {
+        color: #ddd;
+      }
+
+      .status {
+        position: fixed;
+        z-index: 100;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+
+        padding: 10px 18px;
+        border-radius: 999px;
+
+        background: rgba(0, 0, 0, 0.72);
+        color: white;
+
+        font-size: 13px;
+        pointer-events: none;
+        white-space: nowrap;
+      }
+
+      .arjs-loader {
+        position: fixed;
+        z-index: 9999;
+        inset: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: #050816;
+        color: white;
+        font-size: 18px;
+      }
+
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Loading screen -->
+    <div class="arjs-loader" id="loader">Loading AR...</div>
+
+    <!-- Interface -->
+    <div class="ui">
+      <div class="panel">
+        <h1 class="title">🌎 AR Solar System</h1>
+
+        <p class="subtitle">
+          Point your camera at a barcode marker to see a 3D planet.
+        </p>
+
+        <div class="instructions">
+          <div class="marker-card earth">▣ Barcode 5 → Earth</div>
+
+          <div class="marker-card moon">▣ Barcode 7 → Moon</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="status" id="status">Looking for a barcode marker...</div>
+
+    <!-- AR SCENE -->
+    <a-scene
+      embedded
+      vr-mode-ui="enabled: false"
+      renderer="
+      antialias: true;
+      alpha: true;
+      logarithmicDepthBuffer: true;
+      precision: medium;
+    "
+      arjs="
+      sourceType: webcam;
+      trackingMethod: best;
+      detectionMode: mono_and_matrix;
+      matrixCodeType: 3x3;
+      debugUIEnabled: false;
+    "
+      device-orientation-permission-ui="enabled: true"
+    >
+      <!-- ========================= -->
+      <!-- ASSETS -->
+      <!-- ========================= -->
+
+      <a-assets>
+        <!-- Earth downloaded from Sketchfab -->
+        <a-asset-item id="earthModel" src="./earth.glb"> </a-asset-item>
+
+        <!-- Moon downloaded from Sketchfab -->
+        <a-asset-item id="moonModel" src="./moon.glb"> </a-asset-item>
+      </a-assets>
+
+      <!-- ========================= -->
+      <!-- LIGHTING -->
+      <!-- ========================= -->
+
+      <a-entity
+        light="
+        type: ambient;
+        color: #ffffff;
+        intensity: 1.2;
+      "
+      >
+      </a-entity>
+
+      <a-entity
+        light="
+        type: directional;
+        color: #ffffff;
+        intensity: 2;
+      "
+        position="2 4 3"
+      >
+      </a-entity>
+
+      <!-- ========================= -->
+      <!-- EARTH BARCODE 5 -->
+      <!-- ========================= -->
+
+      <a-marker
+        id="earthMarker"
+        type="barcode"
+        value="5"
+        size="1"
+        smooth="true"
+        smooth-count="8"
+        smooth-tolerance="0.01"
+        smooth-threshold="2"
+      >
+        <!-- Earth -->
+
+        <a-entity
+          id="earth"
+          gltf-model="#earthModel"
+          position="0 0.7 0"
+          rotation="0 0 0"
+          scale="0.55 0.55 0.55"
+          animation="
+          property: rotation;
+          to: 0 360 0;
+          dur: 18000;
+          easing: linear;
+          loop: true;
+        "
+        >
+        </a-entity>
+
+        <!-- Earth label -->
+
+        <a-text
+          value="EARTH"
+          position="0 1.55 0"
+          rotation="-90 0 0"
+          align="center"
+          color="#ffffff"
+          width="3"
+          side="double"
+        >
+        </a-text>
+      </a-marker>
+
+      <!-- ========================= -->
+      <!-- MOON BARCODE 7 -->
+      <!-- ========================= -->
+
+      <a-marker
+        id="moonMarker"
+        type="barcode"
+        value="7"
+        size="1"
+        smooth="true"
+        smooth-count="8"
+        smooth-tolerance="0.01"
+        smooth-threshold="2"
+      >
+        <!-- Moon -->
+
+        <a-entity
+          id="moon"
+          gltf-model="#moonModel"
+          position="0 0.65 0"
+          rotation="0 0 0"
+          scale="0.65 0.65 0.65"
+          animation="
+          property: rotation;
+          to: 0 360 0;
+          dur: 22000;
+          easing: linear;
+          loop: true;
+        "
+        >
+        </a-entity>
+
+        <!-- Moon label -->
+
+        <a-text
+          value="MOON"
+          position="0 1.5 0"
+          rotation="-90 0 0"
+          align="center"
+          color="#ffffff"
+          width="3"
+          side="double"
+        >
+        </a-text>
+      </a-marker>
+
+      <!-- CAMERA -->
+
+      <a-entity camera></a-entity>
+    </a-scene>
+
+    <!-- ========================= -->
+    <!-- JAVASCRIPT -->
+    <!-- ========================= -->
+
+    <script>
+      const loader = document.getElementById("loader");
+      const status = document.getElementById("status");
+
+      const earthMarker = document.getElementById("earthMarker");
+
+      const moonMarker = document.getElementById("moonMarker");
+
+      // Hide loading screen
+      window.addEventListener("load", () => {
+        setTimeout(() => {
+          loader.classList.add("hidden");
+        }, 1500);
+      });
+
+      // Earth detected
+      earthMarker.addEventListener("markerFound", () => {
+        status.textContent = "🌎 Earth detected";
+      });
+
+      // Earth lost
+      earthMarker.addEventListener("markerLost", () => {
+        status.textContent = "Looking for a barcode marker...";
+      });
+
+      // Moon detected
+      moonMarker.addEventListener("markerFound", () => {
+        status.textContent = "🌕 Moon detected";
+      });
+
+      // Moon lost
+      moonMarker.addEventListener("markerLost", () => {
+        status.textContent = "Looking for a barcode marker...";
+      });
+    </script>
+  </body>
+</html>
