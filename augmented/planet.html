@@ -17,6 +17,18 @@
         <img id="moon-sphere" src="images/moon.jpg" />
       </a-assets>
 
+      <a-assets>
+        <img id="mars-sphere" src="images/mars.jpg" />
+      </a-assets>
+
+      <a-assets>
+        <img id="mercury-sphere" src="images/mercury.jpg" />
+      </a-assets>
+
+      <a-assets>
+        <img id="neptune-sphere" src="images/neptune.jpg" />
+      </a-assets>
+
       <!-- 
     for more info, see: https://aframe.io/docs/1.0.0/components/animation.html 
     for more examples:  https://stemkoski.github.io/A-Frame-Examples/animation.html
@@ -35,6 +47,33 @@
         <a-sphere
           position="0 0.5 0"
           material="src: #moon-sphere; transparent: true; opacity: 0.95;"
+          animation__rotate="property: rotation; dur: 8000; easing: linear; dir: normal; from:0 0 0; to: 0 360 0; loop: true;"
+        >
+        </a-sphere>
+      </a-marker>
+
+      <a-marker type="barcode" value="0" id="mars-sphere" registerevents>
+        <a-sphere
+          position="0 0.5 0"
+          material="src: #mars-sphere; transparent: true; opacity: 0.95;"
+          animation__rotate="property: rotation; dur: 8000; easing: linear; dir: normal; from:0 0 0; to: 0 360 0; loop: true;"
+        >
+        </a-sphere>
+      </a-marker>
+
+      <a-marker type="barcode" value="1" id="mercury-sphere" registerevents>
+        <a-sphere
+          position="0 0.5 0"
+          material="src: #mercury-sphere; transparent: true; opacity: 0.95;"
+          animation__rotate="property: rotation; dur: 8000; easing: linear; dir: normal; from:0 0 0; to: 0 360 0; loop: true;"
+        >
+        </a-sphere>
+      </a-marker>
+
+      <a-marker type="barcode" value="2" id="neptune-sphere" registerevents>
+        <a-sphere
+          position="0 0.5 0"
+          material="src: #neptune-sphere; transparent: true; opacity: 0.95;"
           animation__rotate="property: rotation; dur: 8000; easing: linear; dir: normal; from:0 0 0; to: 0 360 0; loop: true;"
         >
         </a-sphere>
